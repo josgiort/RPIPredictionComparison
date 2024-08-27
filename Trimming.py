@@ -12,7 +12,7 @@ import subprocess
 itr_trim_election = int(input("Iterative trimming (0 - no, 1 - yes): "))
 itr_trim_mode = int(input("Iterative trimming mode (0 - from left, 1 - from right, 2 - from middle): "))
 itr_trim_spacing = int(input("Enter the spacing between every new trimming: "))
-
+Prueeeebitps
 if itr_trim_election == 1:
     chain_indices = ""
     chain_lengths = ""
