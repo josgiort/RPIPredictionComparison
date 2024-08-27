@@ -1,10 +1,7 @@
 import subprocess
 
-<<<<<<< HEAD
 # RNA chain needs to be specified previously, in a fasta file with chain id 'seq1'
-=======
 # RNA chain needs to be specified previosly, in a fasta file with chain id 'seq1'
->>>>>>> abf2d243d75c46ddac9e5530e018a5e96e855bdb
 
 # Ignore this two lines
 #trim_election = int(input("Chain to trim (0 - none, 1 - prot, 2 - rna, 3 - both): "))
@@ -16,11 +13,7 @@ import subprocess
 itr_trim_election = int(input("Iterative trimming (0 - no, 1 - yes): "))
 itr_trim_mode = int(input("Iterative trimming mode (0 - from left, 1 - from right, 2 - from middle): "))
 itr_trim_spacing = int(input("Enter the spacing between every new trimming: "))
-<<<<<<< HEAD
-Prueeeebitps
-=======
 
->>>>>>> abf2d243d75c46ddac9e5530e018a5e96e855bdb
 if itr_trim_election == 1:
     chain_indices = ""
     chain_lengths = ""
@@ -48,11 +41,8 @@ if itr_trim_election == 1:
 # Call for 'bedtools getfasta' to generate the subchains into another fasta file
 subprocess.run(["bash", "-c", "bedtools getfasta -fi seq1.fasta -bed indexes.bed -fo subchains.fasta"])
 
-<<<<<<< HEAD
 # This rest of the code will be for iterative trimming mode 1 and 2, namely, from right and from middle
-=======
 # This rest of the code will be for iterative trimming mode 2, namely, from middle
->>>>>>> abf2d243d75c46ddac9e5530e018a5e96e855bdb
 # Still will be tested
 """
         if itr_trim_mode == 2:
@@ -97,8 +87,5 @@ subprocess.run(["bash", "-c", "bedtools getfasta -fi seq1.fasta -bed indexes.bed
 
             print(final_example_rna)
             # It misses the for loop to produce the subchains from the iterative squaring
-<<<<<<< HEAD
 """
-=======
-"""
->>>>>>> abf2d243d75c46ddac9e5530e018a5e96e855bdb
+
