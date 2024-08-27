@@ -40,7 +40,7 @@ if itr_trim_election == 1:
 # Call for 'bedtools getfasta' to generate the subchains into another fasta file
 subprocess.run(["bash", "-c", "bedtools getfasta -fi seq1.fasta -bed indexes.bed -fo subchains.fasta"])
 
-# This rest of the code will be for iterative trimming mode 1 and 2, namely, from right and from middle
+# This rest of the code will be for iterative trimming mode 2, namely, from middle
 # Still will be tested
 """
         if itr_trim_mode == 2:
