@@ -1,4 +1,6 @@
 import subprocess
+from Bio import SeqIO
+
 
 # RNA chain needs to be specified previously, in a fasta file with chain id 'seq1'
 # RNA chain needs to be specified previosly, in a fasta file with chain id 'seq1'
@@ -15,22 +17,26 @@ itr_trim_mode = int(input("Iterative trimming mode (0 - from left, 1 - from righ
 itr_trim_spacing = int(input("Enter the spacing between every new trimming: "))
 
 if itr_trim_election == 1:
-    chain_indices = ""
+    chain_indexes = ""
     chain_lengths = ""
+    seq_len = 1022
+    for seq_record in SeqIO.parse("seq1.fasta", "fasta"):
+        seq_len = len(seq_record)
+
     if itr_trim_mode == 0:
         # Indexes for every subchain in the bed file is generated with a loop
-        for i in range(10, 1022, itr_trim_spacing):
-            chain_indices += "seq1\t0\t" + str(i) +"\n"
+        for i in range(2, seq_len+1, itr_trim_spacing): # Never put start index of range() to 0, due to index definition in bed format
+            chain_indexes += "seq1\t0\t" + str(i) +"\n"
             # Also the respective chain length is calculated for each substring for later use in the plots
             chain_lengths += str(i-0)+"\n"
     elif itr_trim_mode == 1:
-        for i in range(10, 1022, itr_trim_spacing):
-            chain_indices += "seq1\t" + str(1022-i) + "\t1022\n"
+        for i in range(4, seq_len+1, itr_trim_spacing): # Never put start index of range() to 0, due to resulting chain of 0 length VERIFICAR DE NUEVO ESTE CASO
+            chain_indexes += "seq1\t" + str(seq_len-i) + "\t" + str(seq_len) + "\n"
             # Also the respective chain length is calculated for each substring for later use in the plots
-            chain_lengths += str(1022 - (1022-i)) + "\n"
+            chain_lengths += str(seq_len - (seq_len-i)) + "\n"
     # Once the indexes are calculated they are stored in the bed file
     f = open("indexes.bed", "w")
-    f.write(chain_indices)
+    f.write(chain_indexes)
     f.close()
 
     # Also the lengths are stored in a txt file
