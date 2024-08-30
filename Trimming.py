@@ -56,43 +56,43 @@ if itr_trim_election == 1:
         # Trimming
         len_intvl = intvl_bdary_r - intvl_bdary_l # Finding length of interval with bed format is easier just a simple subtraction
 
-        l_chunk = intvl_bdary_l # <- Until here the left boundary was adjusted as per the bed format
+        l_chunk = intvl_bdary_l
         r_chunk = seq_len - intvl_bdary_r
 
-        half = (1022 - len_intvl) // 2
-
-        #half = (10 - len_intvl) // 2
+        half = (min(1022, seq_len) - len_intvl) // 2
 
         if l_chunk >= half:
             if r_chunk >= half:
-                # final_example_rna = trim(example_rna, intvl_bdary_l, intvl_bdary_r, half, half)
-                l_chunk_itrble = half
-                r_chunk_itrble = half
+                left_extension = half
+                right_extension = half
             else:
-                # final_example_rna = trim(example_rna, intvl_bdary_l, intvl_bdary_r, half + (half - r_chunk), r_chunk)
-                l_chunk_itrble =  half + (half - r_chunk)
-                r_chunk_itrble =  r_chunk
+                left_extension =  half + (half - r_chunk)
+                right_extension =  r_chunk
         else:
-            # final_example_rna = trim(example_rna, intvl_bdary_l, intvl_bdary_r, l_chunk, half + (half - l_chunk))
-            l_chunk_itrble = l_chunk
-            r_chunk_itrble = half + (half - l_chunk)
+            left_extension = l_chunk
+            right_extension = half + (half - l_chunk)
 
-        for i in range(2, l_chunk_itrble, itr_trim_spacing):
-            chain_indexes += ("seq1\t" + str(seq_len - i) +"\n" + str(seq_len * (flag *)) + "\n")
-
-        splitted_str = chain_indexes
-
-
-        """
-        for i in range(2,  r_chunk_itrble), itr_trim_spacing):
-            chain_indexes += ("seq1\t" + str((seq_len - i) * (flag *)) + "\t" + str(seq_len * (flag *)) + "\n")
-            chain_indexes += ("seq1\t" +
-                              str((seq_len-i) * (flag * )) +
-                              "\t" + str(seq_len * (flag * )) + "\n")
-            chain_lengths += str(seq_len - (seq_len-i)) + "\n"
-
-        """
-        # It misses the for loop to produce the subchains from the iterative squaring
+        if left_extension == right_extension:
+            for i in range(1, left_extension + 1, itr_trim_spacing):
+                chain_indexes += "seq1\t" + str(intvl_bdary_l - i) + "\t" + str(intvl_bdary_r + i) + "\n"
+                chain_lengths += str(len_intvl + 2 * i) + "\n"
+        else:
+            if left_extension > right_extension:
+                for i in range(1, left_extension + 1, itr_trim_spacing):
+                    if i <= right_extension:
+                        chain_indexes += "seq1\t" + str(intvl_bdary_l - i) + "\t" + str(intvl_bdary_r + i) + "\n"
+                        chain_lengths += str(len_intvl + 2 * i) + "\n"
+                    else:
+                        chain_indexes += "seq1\t" + str(intvl_bdary_l - i) + "\t" + str(intvl_bdary_r + right_extension) + "\n"
+                        chain_lengths += str(len_intvl + right_extension + i) + "\n"
+            else:
+                for i in range(1, right_extension + 1, itr_trim_spacing):
+                    if i <= left_extension:
+                        chain_indexes += "seq1\t" + str(intvl_bdary_l - i) + "\t" + str(intvl_bdary_r + i) + "\n"
+                        chain_lengths += str(len_intvl + 2 * i) + "\n"
+                    else:
+                        chain_indexes += "seq1\t" + str(intvl_bdary_l - left_extension) + "\t" + str(intvl_bdary_r + i) + "\n"
+                        chain_lengths += str(len_intvl + left_extension + i) + "\n"
 
     # Once the indexes are calculated they are stored in the bed file
     f = open("indexes.bed", "w")
@@ -106,8 +106,3 @@ if itr_trim_election == 1:
 
 # Call for 'bedtools getfasta' to generate the subchains into another fasta file
 subprocess.run(["bash", "-c", "bedtools getfasta -fi seq1.fasta -bed indexes.bed -fo subchains.fasta"])
-
-# This rest of the code will be for iterative trimming mode 1 and 2, namely, from right and from middle
-# This rest of the code will be for iterative trimming mode 2, namely, from middle
-# Still will be tested
-
