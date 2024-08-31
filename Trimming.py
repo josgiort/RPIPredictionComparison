@@ -1,7 +1,6 @@
 import subprocess
+from TrimmingMode import from_left, from_right, from_middle
 from Bio import SeqIO
-import numpy as np
-from sympy.stats.sampling.sample_numpy import numpy
 
 # RNA chain needs to be specified previously, in a fasta file with chain id 'seq1'
 
@@ -19,80 +18,18 @@ itr_trim_spacing = int(input("Enter the spacing between every new trimming: "))
 if itr_trim_election == 1:
     chain_indexes = ""
     chain_lengths = ""
-    seq_len = 1022 # With this  I am not accounting for less than 1022, check it
+    seq_len = 1022 # With this  I am not accounting for less than 1022, later check it!
     for seq_record in SeqIO.parse("seq1.fasta", "fasta"):
         seq_len = len(seq_record)
 
     # Indexes for every subchain in the bed file is generated with a loop
     # Also the respective chain length is calculated for each substring for later use in the plots
     if itr_trim_mode == 0:
-        for i in range(2, min(seq_len+1, 1023), itr_trim_spacing): # Never put start index of range() to 0, due to index definition bed format
-            chain_indexes += "seq1\t0\t" + str(i) +"\n"
-            chain_lengths += str(i-0)+"\n"
+        chain_indexes, chain_lengths = from_left(seq_len, itr_trim_spacing)
     elif itr_trim_mode == 1:
-        for i in range(2, min(seq_len+1, 1023), itr_trim_spacing): # Never put start index of range() to 0, due to resulting chain of 0 length in legnths file but not in subchains file
-            chain_indexes += "seq1\t" + str(seq_len-i) + "\t" + str(seq_len) + "\n"
-            chain_lengths += str(seq_len - (seq_len-i)) + "\n"
+        chain_indexes, chain_lengths = from_right(seq_len, itr_trim_spacing)
     elif itr_trim_mode == 2:
-        # Starting point to extend within the chain can be specified in interval-based (2 index required) or position-based (1 index required)
-        itr_trim_mid_mode = int(input("Enter starting point type for middle trimming (0 - interval, 1- position): "))
-
-        intvl_bdary_l = ""
-        intvl_bdary_r = ""
-
-        if itr_trim_mid_mode == 0:
-            intvl_bdary_l = int(input("Enter the interval left boundary (0 based index, inclusive): "))
-            intvl_bdary_r = int(input("Enter the interval right boundary (1 based index, inclusive): "))
-
-        elif itr_trim_mid_mode == 1:
-            position_conserve = int(input("Enter the specific position; (1 based index, int): "))
-            # intvl_bdary_l = position_conserve - 50
-            # intvl_bdary_r = position_conserve + 50
-
-            # In practice, position based starting point is same as interval based, since two boundaries are created manually by extending two residues at each side
-            intvl_bdary_l = position_conserve - 3 # Here is 1 more than right boundary due to index definition bed format
-            intvl_bdary_r = position_conserve + 2
-
-        # Trimming
-        len_intvl = intvl_bdary_r - intvl_bdary_l # Finding length of interval with bed format is easier just a simple subtraction
-
-        l_chunk = intvl_bdary_l
-        r_chunk = seq_len - intvl_bdary_r
-
-        half = (min(1022, seq_len) - len_intvl) // 2
-
-        if l_chunk >= half:
-            if r_chunk >= half:
-                left_extension = half
-                right_extension = half
-            else:
-                left_extension =  half + (half - r_chunk)
-                right_extension =  r_chunk
-        else:
-            left_extension = l_chunk
-            right_extension = half + (half - l_chunk)
-
-        if left_extension == right_extension:
-            for i in range(1, left_extension + 1, itr_trim_spacing):
-                chain_indexes += "seq1\t" + str(intvl_bdary_l - i) + "\t" + str(intvl_bdary_r + i) + "\n"
-                chain_lengths += str(len_intvl + 2 * i) + "\n"
-        else:
-            if left_extension > right_extension:
-                for i in range(1, left_extension + 1, itr_trim_spacing):
-                    if i <= right_extension:
-                        chain_indexes += "seq1\t" + str(intvl_bdary_l - i) + "\t" + str(intvl_bdary_r + i) + "\n"
-                        chain_lengths += str(len_intvl + 2 * i) + "\n"
-                    else:
-                        chain_indexes += "seq1\t" + str(intvl_bdary_l - i) + "\t" + str(intvl_bdary_r + right_extension) + "\n"
-                        chain_lengths += str(len_intvl + right_extension + i) + "\n"
-            else:
-                for i in range(1, right_extension + 1, itr_trim_spacing):
-                    if i <= left_extension:
-                        chain_indexes += "seq1\t" + str(intvl_bdary_l - i) + "\t" + str(intvl_bdary_r + i) + "\n"
-                        chain_lengths += str(len_intvl + 2 * i) + "\n"
-                    else:
-                        chain_indexes += "seq1\t" + str(intvl_bdary_l - left_extension) + "\t" + str(intvl_bdary_r + i) + "\n"
-                        chain_lengths += str(len_intvl + left_extension + i) + "\n"
+        chain_indexes, chain_lengths = from_middle(seq_len, itr_trim_spacing)
 
     # Once the indexes are calculated they are stored in the bed file
     f = open("indexes.bed", "w")
