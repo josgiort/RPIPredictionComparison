@@ -12,10 +12,13 @@ from Bio import SeqIO
 # by just iteratively increasing their lengths by a constant factor
 
 itr_trim_election = int(input("Iterative trimming (0 - no, 1 - yes): "))
-itr_trim_mode = int(input("Iterative trimming mode (0 - from left, 1 - from right, 2 - from middle): "))
-itr_trim_spacing = int(input("Enter the spacing between every new trimming: "))
+
 
 if itr_trim_election == 1:
+
+    itr_trim_mode = int(input("Iterative trimming mode (0 - from left, 1 - from right, 2 - from middle): "))
+    itr_trim_spacing = int(input("Enter the spacing between every new trimming: "))
+
     chain_indexes = ""
     chain_lengths = ""
     seq_len = 1022 # With this  I am not accounting for less than 1022, later check it!
@@ -41,5 +44,50 @@ if itr_trim_election == 1:
     f.write(chain_lengths)
     f.close()
 
-# Call for 'bedtools getfasta' to generate the subchains into another fasta file
-subprocess.run(["bash", "-c", "bedtools getfasta -fi seq1.fasta -bed indexes.bed -fo subchains.fasta"])
+    # Call for 'bedtools getfasta' to generate the subchains into another fasta file
+    subprocess.run(["bash", "-c", "bedtools getfasta -fi seq1.fasta -bed indexes.bed -fo subchains.fasta"])
+
+else:
+    normal_mode = int(input("Enter what mode to do (0 - whole chain, 1 - subchain): "))
+
+    if normal_mode == 0:
+        for seq_record in SeqIO.parse("seq1.fasta", "fasta"):
+            seq_len = min(len(seq_record), 1022)
+
+        chain_indexes = "seq1\t0\t" + str(seq_len) + "\n"
+        chain_lengths = str(seq_len) + "\n"
+
+        f = open("indexes.bed", "w")
+        f.write(chain_indexes)
+        f.close()
+
+        # Also the length is stored in txt file
+        f = open("lengths.txt", "w")
+        f.write(chain_lengths)
+        f.close()
+
+        # Call for 'bedtools getfasta' to generate the subchains into another fasta file
+        subprocess.run(["bash", "-c", "bedtools getfasta -fi seq1.fasta -bed indexes.bed -fo subchains.fasta"])
+
+    elif normal_mode == 1:
+        intvl_bdary_l = int(input("Enter the interval left boundary (0 based index, inclusive): "))
+        intvl_bdary_r = int(input("Enter the interval right boundary (1 based index, inclusive): "))
+
+        if (intvl_bdary_r - intvl_bdary_l) > 1022:
+            print("Maximum length of subchain is 1022, try again with shorter subchain")
+            exit(0)
+
+        chain_indexes = "seq1\t" + str(intvl_bdary_l) + "\t" + str(intvl_bdary_r) + "\n"
+        chain_lengths = str(intvl_bdary_r - intvl_bdary_l) + "\n"
+
+        f = open("indexes.bed", "w")
+        f.write(chain_indexes)
+        f.close()
+
+        # Also the length is stored in txt file
+        f = open("lengths.txt", "w")
+        f.write(chain_lengths)
+        f.close()
+
+        # Call for 'bedtools getfasta' to generate the subchains into another fasta file
+        subprocess.run(["bash", "-c", "bedtools getfasta -fi seq1.fasta -bed indexes.bed -fo subchains.fasta"])
