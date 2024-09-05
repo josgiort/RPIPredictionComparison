@@ -54,11 +54,15 @@ def from_middle(seq_len, itr_trim_spacing):
             left_extension = half
             right_extension = half
         else:
-            left_extension = half + (half - r_chunk)
+            left_extension = half
             right_extension = r_chunk
     else:
-        left_extension = l_chunk
-        right_extension = half + (half - l_chunk)
+        if r_chunk >= half:
+            left_extension = l_chunk
+            right_extension = half
+        else:
+            left_extension = l_chunk
+            right_extension = r_chunk
 
     if left_extension == right_extension:
         for i in range(1, left_extension + 1, itr_trim_spacing):
