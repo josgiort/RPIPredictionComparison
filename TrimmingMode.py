@@ -66,23 +66,27 @@ def from_middle(seq_len, itr_trim_spacing):
 
     if left_extension == right_extension:
         for i in range(1, left_extension + 1, itr_trim_spacing):
-            chain_indexes += "seq1\t" + str(intvl_bdary_l - i) + "\t" + str(intvl_bdary_r + i) + "\n"
-            chain_lengths += str(len_intvl + 2 * i) + "\n"
+            final_l= intvl_bdary_l - i
+            final_r= intvl_bdary_r + i
+            chain_indexes += "seq1\t" + str(final_l) + "\t" + str(final_r) + "\n"
+            chain_lengths += str(final_r - final_l) + "\n"
     else:
         if left_extension > right_extension:
             for i in range(1, left_extension + 1, itr_trim_spacing):
+                final_l = intvl_bdary_l - i
                 if i <= right_extension:
-                    chain_indexes += "seq1\t" + str(intvl_bdary_l - i) + "\t" + str(intvl_bdary_r + i) + "\n"
-                    chain_lengths += str(len_intvl + 2 * i) + "\n"
+                    final_r = intvl_bdary_r + i
                 else:
-                    chain_indexes += "seq1\t" + str(intvl_bdary_l - i) + "\t" + str(intvl_bdary_r + right_extension) + "\n"
-                    chain_lengths += str(len_intvl + right_extension + i) + "\n"
+                    final_r = intvl_bdary_r + right_extension
+                chain_indexes += "seq1\t" + str(final_l) + "\t" + str(final_r) + "\n"
+                chain_lengths += str(final_r - final_l) + "\n"
         else:
             for i in range(1, right_extension + 1, itr_trim_spacing):
+                final_r = intvl_bdary_r + i
                 if i <= left_extension:
-                    chain_indexes += "seq1\t" + str(intvl_bdary_l - i) + "\t" + str(intvl_bdary_r + i) + "\n"
-                    chain_lengths += str(len_intvl + 2 * i) + "\n"
+                    final_l = intvl_bdary_l - i
                 else:
-                    chain_indexes += "seq1\t" + str(intvl_bdary_l - left_extension) + "\t" + str(intvl_bdary_r + i) + "\n"
-                    chain_lengths += str(len_intvl + left_extension + i) + "\n"
+                    final_l = intvl_bdary_l - left_extension
+                chain_indexes += "seq1\t" + str(final_l) + "\t" + str(final_r) + "\n"
+                chain_lengths += str(final_r - final_l) + "\n"
     return chain_indexes, chain_lengths

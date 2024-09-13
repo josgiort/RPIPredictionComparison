@@ -152,10 +152,12 @@ y=[-1.0, -1.6, -4.4, -6.7, -9.9, -17.3, -19.9] # good one
 
 
 plt.figure(figsize=(5, 5), layout='constrained')
-plt.plot(x, y, label='score')
+plt.plot(x, y)
+plt.scatter(x, y,  s=14, alpha=1.0, edgecolors="k")
+plt.xticks(rotation=35)
 #plt.plot(x2, y2, label='affinity score')
-plt.xlabel('embeddor score')
-plt.ylabel('affinity score')
+plt.xlabel('embeddor score (interaction probability)')
+plt.ylabel('affinity score (-fold)')
 plt.title("Embeddor vs Affinity score on SELEX samples")
-plt.legend()
+#plt.legend()
 plt.show()
