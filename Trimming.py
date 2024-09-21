@@ -1,11 +1,55 @@
+import sys
 import subprocess
 from TrimmingMode import from_left, from_right, from_middle
 from Bio import SeqIO
+# Mode 1 complete, 2 subchain, 3 iterative trimming
+mode_operation = int(sys.argv[1])
+# Please name this file "sequences.fasta"
+input_file = sys.argv[2]
+# Please name this file "subchains.fasta"
+output_file = sys.argv[3]
 
+sequences = list(SeqIO.parse(input_file, "fasta"))
+
+# if mode is 1 that means we take the fasta file and use embeddor with every full chain, it omits the needing of an input file
+if mode_operation == 1 :
+    chain_indexes = ""
+    for record in sequences :
+        seq_len = min(len(record.seq), 1022)
+        chain_indexes += record.id + "\t0\t" + str(seq_len) + "\n"
+
+    # With "w" option, it will override any existing content and create anew file if "indexes.bed" does not exist
+    f = open("indexes.bed", "w")
+    f.write(chain_indexes)
+    f.close()
+
+    # Call for 'bedtools getfasta' to generate the subchains into another fasta file
+    subprocess.run(["bash", "-c", "bedtools getfasta -fi " + input_file + " -bed indexes.bed -fo " + output_file])
+
+"""
+# if mode is 2 that means we take the fasta and take a substring for every chain, it needs an input file specifying
+elif modeOperation == 2 :
+    # Check correct format of input file
+    print()
+# if mode is 3 that means we take the fasta and do iterative trimming, it needs an input file specifying the trimmming parameters
+elif modeOperation == 3 :
+# Check correct format of input file
+    print()
+    # New step todo, make update de rna-protein pairs file to have de version with all trimmings
+else:
+    # Print enter a valid mode of operation
+    print()
+
+
+
+
+
+
+
+#####################################################################################
 # RNA chain needs to be specified previously, in a fasta file with chain id 'seq1'
 
-# Ignore this two lines
-#trim_election = int(input("Chain to trim (0 - none, 1 - prot, 2 - rna, 3 - both): "))
+
 #if trim_election == 1:
 
 # Iterative trimming is just the process of getting several subchains from a given starting index in a chain,
@@ -91,3 +135,5 @@ else:
 
         # Call for 'bedtools getfasta' to generate the subchains into another fasta file
         subprocess.run(["bash", "-c", "bedtools getfasta -fi seq1.fasta -bed indexes.bed -fo subchains.fasta"])
+
+"""
