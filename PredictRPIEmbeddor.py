@@ -1,38 +1,44 @@
-from Bio import SeqIO
 import sys
 import subprocess
 import re
 
-# Please name this file "dataset_pcsd.text"
+# Please name this file "dataset_inference.txt"
 input_file = sys.argv[1]
-# Please name this file "result_table.fasta"
+# Please name this file "result_table.txt"
 output_file = sys.argv[2]
 
-#sequences = list(SeqIO.parse(input_file, "fasta"))
-
-rpi_embeddor = ["python3", "child.py"]
+rpi_embeddor = ["python3", "src/inference.py"]
 result_table = ""
 
-
-
-# ver como proveer el par protein - rna, porque con esto solo se ingresaria el rna, falta la proteina
-# approach crear un archivo en Trimming llamado dataset_pcsd donde este cada par protein - rna
+# approach crear un archivo en Trimming llamado dataset_inference donde este cada par protein - rna
 # esto supone procesamiento extra para el caso de iterative trimming
-with open("dataset_pcsd.txt") as file:
+with open(input_file) as file:
     for line in file:
         prot = re.search("[A-Z]+\t", line)[0].strip()
         rna = re.search("\t[A-Z]+\t", line)[0].strip()
-
-        #input_stdin = [prot, rna]
-        process = subprocess.Popen(rpi_embeddor, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-
+        # Setting up call for RPIEmbeddor
+        process = subprocess.Popen(rpi_embeddor, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=r'/home/jose/Desktop/RPIEmbeddor-main/rpi-main', text=True)
+        # Specify first stdin
         process.stdin.write(prot + "\n")
         process.stdin.flush()
-
+        # Specify second stdin
         process.stdin.write(rna + "\n")
         process.stdin.flush()
-
+        # Get stdout
         stdout, stderr = process.communicate()
         print(stdout)
-        print("")
+        # Adapt prediction text to add it to result_table file
+        prediction = re.search("NEGATIVE|POSITIVE", stdout)[0].strip()
+        if prediction == "POSITIVE":
+            prediction = "True"
+        elif prediction == "NEGATIVE":
+            prediction = "False"
+        else:
+            prediction = "something_weird_happened_with_the_prediction_check_it_out"
+
+        result_table += line.replace("\n", "") + '\t' + prediction + '\n'
+
+f = open(output_file, "w")
+f.write(result_table)
+f.close()
 

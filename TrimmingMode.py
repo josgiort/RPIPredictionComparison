@@ -1,26 +1,28 @@
 
 
-def from_left(seq_len, itr_trim_spacing):
+def from_left(seq_id, seq_len, itr_trim_spacing):
     chain_indexes = ""
-    chain_lengths = ""
+    #chain_lengths = ""
     # Never put start index of range() to 0, due to index definition bed format
     for i in range(2, min(seq_len + 1, 1023), itr_trim_spacing):
-        chain_indexes += "seq1\t0\t" + str(i) + "\n" # later adapt this to handle more sequences than seq1
-        chain_lengths += str(i - 0) + "\n"
-    return chain_indexes, chain_lengths
+        chain_indexes += seq_id + "\t0\t" + str(i) + "\n" # later adapt this to handle more sequences than seq1
+        #chain_lengths += str(i - 0) + "\n"
+    #return chain_indexes, chain_lengths
+    return chain_indexes
 
-def from_right(seq_len, itr_trim_spacing):
+def from_right(seq_id, seq_len, itr_trim_spacing):
     chain_indexes = ""
-    chain_lengths = ""
+    #chain_lengths = ""
     for i in range(2, min(seq_len + 1, 1023),
                    itr_trim_spacing):  # Never put start index of range() to 0, due to resulting chain of 0 length in legnths file but not in subchains file
-        chain_indexes += "seq1\t" + str(seq_len - i) + "\t" + str(seq_len) + "\n"
-        chain_lengths += str(seq_len - (seq_len - i)) + "\n"
-    return chain_indexes, chain_lengths
+        chain_indexes += seq_id + "\t" + str(seq_len - i) + "\t" + str(seq_len) + "\n"
+        #chain_lengths += str(seq_len - (seq_len - i)) + "\n"
+    #return chain_indexes, chain_lengths
+    return chain_indexes
 
-def from_middle(seq_len, itr_trim_spacing):
+def from_middle(seq_id, seq_len, itr_trim_spacing):
     chain_indexes = ""
-    chain_lengths = ""
+    #chain_lengths = ""
 
     # Starting point to extend within the chain can be specified in interval-based (2 index required) or position-based (1 index required)
     itr_trim_mid_mode = int(input("Enter starting point type for middle trimming (0 - interval, 1- position): "))
@@ -68,8 +70,8 @@ def from_middle(seq_len, itr_trim_spacing):
         for i in range(1, left_extension + 1, itr_trim_spacing):
             final_l= intvl_bdary_l - i
             final_r= intvl_bdary_r + i
-            chain_indexes += "seq1\t" + str(final_l) + "\t" + str(final_r) + "\n"
-            chain_lengths += str(final_r - final_l) + "\n"
+            chain_indexes += seq_id + "\t" + str(final_l) + "\t" + str(final_r) + "\n"
+            #chain_lengths += str(final_r - final_l) + "\n"
     else:
         if left_extension > right_extension:
             for i in range(1, left_extension + 1, itr_trim_spacing):
@@ -78,8 +80,8 @@ def from_middle(seq_len, itr_trim_spacing):
                     final_r = intvl_bdary_r + i
                 else:
                     final_r = intvl_bdary_r + right_extension
-                chain_indexes += "seq1\t" + str(final_l) + "\t" + str(final_r) + "\n"
-                chain_lengths += str(final_r - final_l) + "\n"
+                chain_indexes += seq_id + "\t" + str(final_l) + "\t" + str(final_r) + "\n"
+                #chain_lengths += str(final_r - final_l) + "\n"
         else:
             for i in range(1, right_extension + 1, itr_trim_spacing):
                 final_r = intvl_bdary_r + i
@@ -87,6 +89,7 @@ def from_middle(seq_len, itr_trim_spacing):
                     final_l = intvl_bdary_l - i
                 else:
                     final_l = intvl_bdary_l - left_extension
-                chain_indexes += "seq1\t" + str(final_l) + "\t" + str(final_r) + "\n"
-                chain_lengths += str(final_r - final_l) + "\n"
-    return chain_indexes, chain_lengths
+                chain_indexes += seq_id + "\t" + str(final_l) + "\t" + str(final_r) + "\n"
+                #chain_lengths += str(final_r - final_l) + "\n"
+    #return chain_indexes, chain_lengths
+    return chain_indexes
