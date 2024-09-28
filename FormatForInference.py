@@ -5,10 +5,21 @@ import re
 from TrimmingMode import from_left, from_right, from_middle
 from Bio import SeqIO
 
-# This file sets up the fasta file of sequences to a text format needed for RPIEmbeddor to do inference
-# Additionally, if specified, it creates versions of the chains of varying length
+# This file sets up the fasta file of RNA sequences to a proper text format for RPIEmbeddor to do inference
+# This file has three modes of operation for handling the RNA sequences
 
-# Mode 1 complete, 2 subchain, 3 iterative trimming
+# RNA sequences need to be specified in a fasta file 'sequences.fasta'
+# Depending on the mode of operation of the script, it would be required that RNA sequences have arguments in their sequence description line, for example:
+# >sequence1 | parameter_1=1234 parameter_2=1234 parameter_3=1234
+# this line above just represents an example sequence.description line with arguments for a mode of operation
+
+
+# Mode 1: taking complete sequence. Mode 2: taking substring from sequence.
+# Mode 3: taking substrings with gradually incrementing lengths from a starting part of the sequence, these increments
+# can be done from the sequence left end, from the sequence right end or from some part within the sequence,
+# in this last case, the increments are done simultaneously to the left and to the right of the specified starting part (interval)
+# until reaching, if possible, the half of the sequence length at each direction
+
 mode_operation = int(sys.argv[1])
 # Please name this file "sequences.fasta"
 input_file = sys.argv[2]
@@ -26,15 +37,16 @@ if mode_operation == 1 :
 # the interval to conserve is appended to the sequence id's in the fasta file, with the format " | left_boundary right_boundary"
 elif mode_operation == 2:
     for record in sequences:
-        interval = re.findall("\| [0-9]+ [0-9]+$", record.description)
+        #interval = re.findall("\| [0-9]+ [0-9]+$", record.description)
+        interval = re.findall("\| start_index=[0-9]+ end_index=[0-9]+", record.description)
         if len(interval) == 0:
             print("Not proper text format for substring intervals")
             exit(0)
         else:
-            left_boundary = re.findall(" [0-9]+ ", record.description)
-            left_boundary = int(left_boundary[0].strip())
-            right_boundary = re.findall(" [0-9]+$", record.description)
-            right_boundary = int(right_boundary[0].strip())
+            left_boundary = re.findall("start_index=[0-9]+", record.description)
+            left_boundary = int(left_boundary[0].split("=")[1].strip())
+            right_boundary = re.findall("end_index=[0-9]+", record.description)
+            right_boundary = int(right_boundary[0].split("=")[1].strip())
 
             if (right_boundary - left_boundary) > 1022:
                 print("Maximum length of subchain is 1022, try again with shorter subchain")
@@ -43,60 +55,53 @@ elif mode_operation == 2:
             chain_indexes += record.id + "\t" + str(left_boundary) + "\t" + str(right_boundary) + "\n"
 
             # Pending: Specify in the documentation base of index numbers
-            # intvl_bdary_l = int(input("Enter the interval left boundary (0 based index, inclusive): "))
-            # intvl_bdary_r = int(input("Enter the interval right boundary (1 based index, inclusive): "))
+            # intvl_bdary_l is 0 based index, inclusive): "))
+            # intvl_bdary_r is 1 based index, inclusive): "))
 
-# if mode is 3, several substrings of successive varying length are taken, it needs an input file specifying the trimmming parameters
+# if mode is 3, several substrings of successive varying length are taken
+# it needs some parameters on the description line of the sequences in the fasta file
+# the process of getting several subchains from a given starting index in a chain,
+# by gradually increasing their lengths by a constant factor
+
 elif mode_operation == 3:
     # Check correct format of input file
     for record in sequences:
-        interval = re.findall("\| varying_length_mode=[0-9] spacing=[0-9]{1,3} (?:middle_start_left=[0-9]+ middle_start_right=[0-9]+)?$", record.description)
-        if len(interval) == 0:
-            print("Not proper text format for substring intervals")
+        arguments = re.findall("\| varying_length_mode=[0-9] spacing=[0-9]{1,3}(?: middle_start_left=[0-9]+ middle_start_right=[0-9]+)?", record.description)
+        if len(arguments) == 0:
+            print("Not proper arguments for varying length substrings")
             exit(0)
         else:
-# TERMINAR ESTOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO SOLO ES HABILITAR LOS TRES VARYING LENGTH MODE
-            seq_len = min(len(record.seq), 1022)
+            #args_varying_lengths = re.split(" ", record.description)
+            varying_length_mode = re.findall("varying_length_mode=[0-9]", record.description)
+            varying_length_mode = int(varying_length_mode[0].split("=")[1].strip())
+
+            spacing = re.findall("spacing=[0-9]{1,3}", record.description)
+            spacing = int(spacing[0].split("=")[1].strip())
+
+            seq_len = len(record.seq)
+
+            if varying_length_mode == 2:
+                middle_start_left = re.findall("middle_start_left=[0-9]+", record.description)
+                middle_start_left = int(middle_start_left[0].split("=")[1].strip())
+
+                middle_start_right = re.findall("middle_start_right=[0-9]+", record.description)
+                middle_start_right = int(middle_start_right[0].split("=")[1].strip())
 
                 # Indexes for every subchain in the bed file is generated with a loop
                 # Also the respective chain length is calculated for each substring for later use in the plots
-            if itr_trim_mode == 0:
-                chain_indexes, chain_lengths = from_left(seq_len, itr_trim_spacing)
-            elif itr_trim_mode == 1:
-                chain_indexes, chain_lengths = from_right(seq_len, itr_trim_spacing)
-            elif itr_trim_mode == 2:
-                chain_indexes, chain_lengths = from_middle(seq_len, itr_trim_spacing)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            left_boundary = re.findall(" [0-9]+ ", record.description)
-            left_boundary = int(left_boundary[0].strip())
-            right_boundary = re.findall(" [0-9]+$", record.description)
-            right_boundary = int(right_boundary[0].strip())
-
-            if (right_boundary - left_boundary) > 1022:
-                print("Maximum length of subchain is 1022, try again with shorter subchain")
+            if varying_length_mode == 0:
+                chain_indexes += from_left(record.id, seq_len, spacing)
+            elif varying_length_mode == 1:
+                chain_indexes += from_right(record.id, seq_len, spacing)
+            elif varying_length_mode == 2:
+                chain_indexes += from_middle(record.id, seq_len, spacing, middle_start_left, middle_start_right)
+            else:
+                print("Invalid argument varying_length_mode")
                 exit(0)
 
-            chain_indexes += record.id + "\t" + str(left_boundary) + "\t" + str(right_boundary) + "\n"
-
 else:
-    # Print enter a valid mode of operation
-    print()
+    print("Please enter a valid mode of operation")
+    exit(0)
 
 # With "w" option, it will override any existing content and create a new file if "indexes.bed" does not exist
 f = open("indexes.bed", "w")
@@ -129,100 +134,3 @@ with open('test_set_limit.jsonl', 'r') as json_file:
 f = open(output_file, "w")
 f.write(dataset_inference)
 f.close()
-
-
-
-
-
-"""
-#####################################################################################
-# RNA chain needs to be specified previously, in a fasta file with chain id 'seq1'
-
-
-#if trim_election == 1:
-
-# Iterative trimming is just the process of getting several subchains from a given starting index in a chain,
-# by just iteratively increasing their lengths by a constant factor
-
-itr_trim_election = int(input("Iterative trimming (0 - no, 1 - yes): "))
-
-
-if itr_trim_election == 1:
-
-    itr_trim_mode = int(input("Iterative trimming mode (0 - from left, 1 - from right, 2 - from middle): "))
-    itr_trim_spacing = int(input("Enter the spacing between every new trimming: "))
-
-    chain_indexes = ""
-    chain_lengths = ""
-    seq_len = 1022 # With this  I am not accounting for less than 1022, later check it!
-    for seq_record in SeqIO.parse("seq1.fasta", "fasta"):
-        seq_len = len(seq_record)
-
-    # Indexes for every subchain in the bed file is generated with a loop
-    # Also the respective chain length is calculated for each substring for later use in the plots
-    if itr_trim_mode == 0:
-        chain_indexes, chain_lengths = from_left(seq_len, itr_trim_spacing)
-    elif itr_trim_mode == 1:
-        chain_indexes, chain_lengths = from_right(seq_len, itr_trim_spacing)
-    elif itr_trim_mode == 2:
-        chain_indexes, chain_lengths = from_middle(seq_len, itr_trim_spacing)
-
-    # Once the indexes are calculated they are stored in the bed file
-    f = open("indexes.bed", "w")
-    f.write(chain_indexes)
-    f.close()
-
-    # Also the lengths are stored in a txt file
-    f = open("lengths.txt", "w")
-    f.write(chain_lengths)
-    f.close()
-
-    # Call for 'bedtools getfasta' to generate the subchains into another fasta file
-    subprocess.run(["bash", "-c", "bedtools getfasta -fi seq1.fasta -bed indexes.bed -fo subchains.fasta"])
-
-else:
-    normal_mode = int(input("Enter what mode to do (0 - whole chain, 1 - subchain): "))
-
-    if normal_mode == 0:
-        for seq_record in SeqIO.parse("seq1.fasta", "fasta"):
-            seq_len = min(len(seq_record), 1022)
-
-        chain_indexes = "seq1\t0\t" + str(seq_len) + "\n"
-        chain_lengths = str(seq_len) + "\n"
-
-        f = open("indexes.bed", "w")
-        f.write(chain_indexes)
-        f.close()
-
-        # Also the length is stored in txt file
-        f = open("lengths.txt", "w")
-        f.write(chain_lengths)
-        f.close()
-
-        # Call for 'bedtools getfasta' to generate the subchains into another fasta file
-        subprocess.run(["bash", "-c", "bedtools getfasta -fi seq1.fasta -bed indexes.bed -fo subchains.fasta"])
-
-    elif normal_mode == 1:
-        intvl_bdary_l = int(input("Enter the interval left boundary (0 based index, inclusive): "))
-        intvl_bdary_r = int(input("Enter the interval right boundary (1 based index, inclusive): "))
-
-        if (intvl_bdary_r - intvl_bdary_l) > 1022:
-            print("Maximum length of subchain is 1022, try again with shorter subchain")
-            exit(0)
-
-        chain_indexes = "seq1\t" + str(intvl_bdary_l) + "\t" + str(intvl_bdary_r) + "\n"
-        chain_lengths = str(intvl_bdary_r - intvl_bdary_l) + "\n"
-
-        f = open("indexes.bed", "w")
-        f.write(chain_indexes)
-        f.close()
-
-        # Also the length is stored in txt file
-        f = open("lengths.txt", "w")
-        f.write(chain_lengths)
-        f.close()
-
-        # Call for 'bedtools getfasta' to generate the subchains into another fasta file
-        subprocess.run(["bash", "-c", "bedtools getfasta -fi seq1.fasta -bed indexes.bed -fo subchains.fasta"])
-
-"""
