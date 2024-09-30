@@ -11,15 +11,16 @@ from Bio import SeqIO
 # RNA sequences need to be specified in a fasta file 'sequences.fasta'
 # Depending on the mode of operation of the script, it would be required that RNA sequences have arguments in their sequence description line, for example:
 # >sequence1 | parameter_1=1234 parameter_2=1234 parameter_3=1234
-# this line above just represents an example sequence.description line with arguments for a mode of operation
 
 
-# Mode 1: taking complete sequence. Mode 2: taking substring from sequence.
-# Mode 3: taking substrings with gradually incrementing lengths from a starting part of the sequence, these increments
+# Mode 1: taking whole RNA sequence.
+# Mode 2: taking substring from RNA sequence.
+# Mode 3: taking substrings with gradually incrementing lengths from a starting part of the RNA sequence, these increments
 # can be done from the sequence left end, from the sequence right end or from some part within the sequence,
-# in this last case, the increments are done simultaneously to the left and to the right of the specified starting part (interval)
-# until reaching, if possible, the half of the sequence length at each direction
+# for this last case, the increments are done simultaneously to the left and to the right of the specified starting part (interval)
+# until reaching, if possible, the half of the sequence length at each direction.
 
+# Please specify either 1, 2 or 3 for desired mode of operation
 mode_operation = int(sys.argv[1])
 # Please name this file "sequences.fasta"
 input_file = sys.argv[2]
@@ -28,13 +29,26 @@ output_file = sys.argv[3]
 
 sequences = list(SeqIO.parse(input_file, "fasta"))
 chain_indexes = ""
-# If mode is 1, sequences of fasta file are taken fully or up to the first 1022 characters, it omits the needing of an input file
+
+
+# If mode is 1, sequences of fasta file are taken fully or up to the first 1022 characters
+# No extra arguments needed in the fasta file
 if mode_operation == 1 :
     for record in sequences :
         seq_len = min(len(record.seq), 1022)
         chain_indexes += record.id + "\t0\t" + str(seq_len) + "\n"
+
+
 # if mode is 2, substrings of the sequences of fasta file are taken
-# the interval to conserve is appended to the sequence id's in the fasta file, with the format " | left_boundary right_boundary"
+# Extra arguments needed in the fasta file, in the description line of each RNA sequence:
+# the interval to conserve is appended to the sequence id's in the fasta file,
+# with the format " | start_index=XXX end_index=YYY"
+# Note: start_index is a 0-based index while end_index is a 1-based index
+# for example: from the RNA sequence "seq1", take the substring from the third character to the seventh character, both inclusive
+# >seq1 | start_index=2 end_index=7
+# AGCGAUCCGG
+# Then the script would take the substring CGAUC from the RNA sequence
+
 elif mode_operation == 2:
     for record in sequences:
         #interval = re.findall("\| [0-9]+ [0-9]+$", record.description)
@@ -53,10 +67,6 @@ elif mode_operation == 2:
                 exit(0)
 
             chain_indexes += record.id + "\t" + str(left_boundary) + "\t" + str(right_boundary) + "\n"
-
-            # Pending: Specify in the documentation base of index numbers
-            # intvl_bdary_l is 0 based index, inclusive): "))
-            # intvl_bdary_r is 1 based index, inclusive): "))
 
 # if mode is 3, several substrings of successive varying length are taken
 # it needs some parameters on the description line of the sequences in the fasta file
@@ -125,7 +135,7 @@ with open("subchains.fasta") as fasta_file:
         fasta_dict[sequence_id].append([seq_record.id.split('|')[0], seq_record.seq])
 
 dataset_inference = ""
-with open('test_set_limit.jsonl', 'r') as json_file:
+with open('test_set_jsonl.jsonl', 'r') as json_file:
     for (line, key_val) in zip(json_file, fasta_dict.items()):
         data_entry = json.loads(line)
         for seq in key_val[1]:

@@ -12,8 +12,12 @@ result_table = ""
 
 # approach crear un archivo en Trimming llamado dataset_inference donde este cada par protein - rna
 # esto supone procesamiento extra para el caso de iterative trimming
+
+count_line = 0
+
 with open(input_file) as file:
     for line in file:
+        count_line += 1
         prot = re.search("[A-Z]+\t", line)[0].strip()
         rna = re.search("\t[A-Z]+\t", line)[0].strip()
         # Setting up call for RPIEmbeddor
@@ -26,7 +30,9 @@ with open(input_file) as file:
         process.stdin.flush()
         # Get stdout
         stdout, stderr = process.communicate()
+        print("Datapoint number: " + str(count_line))
         print(stdout)
+        print(stderr)
         # Adapt prediction text to add it to result_table file
         prediction = re.search("NEGATIVE|POSITIVE", stdout)[0].strip()
         if prediction == "POSITIVE":
