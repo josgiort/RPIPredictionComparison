@@ -20,7 +20,7 @@ from Bio import SeqIO
 # for this last case, the increments are done simultaneously to the left and to the right of the specified starting part (interval)
 # until reaching, if possible, the half of the sequence length at each direction.
 
-# Please specify either 1, 2 or 3 for desired mode of operation
+# Please specify only either 1, 2 or 3 for desired mode of operation
 mode_operation = int(sys.argv[1])
 # Please name this file "sequences.fasta"
 input_file = sys.argv[2]

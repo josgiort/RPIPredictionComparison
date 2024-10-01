@@ -32,7 +32,6 @@ with open(input_file) as file:
         stdout, stderr = process.communicate()
         print("Datapoint number: " + str(count_line))
         print(stdout)
-        print(stderr)
         # Adapt prediction text to add it to result_table file
         prediction = re.search("NEGATIVE|POSITIVE", stdout)[0].strip()
         if prediction == "POSITIVE":
