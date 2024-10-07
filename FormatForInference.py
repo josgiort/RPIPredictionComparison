@@ -135,7 +135,7 @@ with open("subchains.fasta") as fasta_file:
         fasta_dict[sequence_id].append([seq_record.id.split('|')[0], seq_record.seq])
 
 dataset_inference = ""
-with open('test_set_jsonl.jsonl', 'r') as json_file:
+with open('test_set.jsonl', 'r') as json_file:
     for (line, key_val) in zip(json_file, fasta_dict.items()):
         data_entry = json.loads(line)
         for seq in key_val[1]:

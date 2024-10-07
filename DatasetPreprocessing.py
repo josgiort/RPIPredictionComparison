@@ -6,7 +6,7 @@ fasta = ""
 cntr = 0
 
 # Reading from a JSON Lines file
-with open('test_set_jsonl.jsonl', 'r') as file:
+with open('test_set.jsonl', 'r') as file:
     for line in file:
         cntr += 1
         data_entry = json.loads(line)
