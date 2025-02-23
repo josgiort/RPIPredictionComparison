@@ -18,16 +18,19 @@ Another aim of this project is validating somehow the performance of the special
 Structured project outlook
 
 PART 1 On the performance of the RPI prediction specialized tool in a set of validated RPI examples
+
 The first part of this project deals with evaluating the prediction behavior of the RPIEmberddor tool (Matus, D. et al, 2024) on a set of validated RPI examples.
 In this case a procedure of treating the RNA sequences of the examples was done, in order to modify a bit the sequences while maintaining a given region of them which is believed to be key for the interaction to happen.
 
 PART 2 Analysing the performance of the RPIEMbeddor tool on its test set with some modifications to the test set
+
 For this part the test set of the RPIEmbeddor tool was used to validate the predictions on it and obtain some performance metrics on this test set
 Another 
 
 PART 3 Analysis of AlphaFold3 outputs on a well diverse RPI example dataset called RNACompete
 
 PART 4 Using the table of RNACompete with a tabular Prior Fitted Network Model
+
 In this last part a tool for finding general patterns in tabular datasets like TabPFN was used to find if the metrics produced by AlphaFold3 can indeed be used to differentiate RPI from not RPI.
 
 
