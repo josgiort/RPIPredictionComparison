@@ -1,14 +1,8 @@
 # Master project
 This is a documentation repository for a master project from the univerisity of freiburg
 
-![university](https://github.com/user-attachments/assets/23612e45-d64b-456c-9c4e-c5bd4662c32c)
+<img src="https://github.com/user-attachments/assets/23612e45-d64b-456c-9c4e-c5bd4662c32c" alt="university" width="500"/>
 
-
-### Install environment
-
-##### Install bedtools
-
-apt-get install bedtools
 
 ### Objective of the master project
 
@@ -38,4 +32,8 @@ PART 3 Classifying RNA-Protein Interactions with TabPFN and AlphaFold3
 
 
 
-Seguir preparando este repo, no se va a subir el RNA compete completo es demasiado pesado
+### Install environment
+
+##### Install bedtools
+
+apt-get install bedtools
