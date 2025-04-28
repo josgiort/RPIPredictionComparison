@@ -33,7 +33,9 @@ PART 3 Classifying RNA-Protein Interactions with TabPFN and AlphaFold3
 
 ### Reproducing results
 
-For part one, enter the folder "dataset_predictions"
+### Part one
+
+Enter the folder "dataset_predictions"
 
 There run:
 python pred_embeddor.py
