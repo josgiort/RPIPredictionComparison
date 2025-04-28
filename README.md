@@ -16,7 +16,7 @@ sequence level signals of RNA-protein binding and TabPFN can succeed at
 RPI recognition given the right feature set.
 
 
-## RNA–Protein Interactions (RPIs) and Deep Learning
+## "Analysis of RNA-Protein complexes predicted with deep learning"
 
 The driving biological actors of this work are the RNA-Protein Interactions (RPIs), as they hold tremendous importance in life.
 
@@ -98,12 +98,7 @@ Feature tables were built from the RPI examples, and TabPFN was applied to provi
 
 
 
-
-
-
-
-
-Structured project outlook
+## Structured project outlook
 
 PART 1 Examining RPIEmbeddor performance on RPI examples 1
 
@@ -117,7 +112,7 @@ PART 2 Comparing the AlphaFold3 output metrics distributions between RPI positiv
 PART 3 Classifying RNA-Protein Interactions with TabPFN and AlphaFold3
 
 
-### Reproducing results
+## Reproducing results
 
 ### Part one
 
