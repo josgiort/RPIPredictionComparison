@@ -31,6 +31,20 @@ PART 2 Comparing the AlphaFold3 output metrics distributions between RPI positiv
 PART 3 Classifying RNA-Protein Interactions with TabPFN and AlphaFold3
 
 
+### Reproducing results
+
+For part one, enter the folder "dataset_predictions"
+
+There run:
+python pred_embeddor.py
+
+And then:
+python ConfusionMatrix.py
+
+File "dataset_inference.txt" contains the TS-Fam testing set of RPIembeddor
+With the first program, RPIembeddor is run on the sequences of TS-Fam and the predictions are stored in "result_table.txt"
+Then from this last file the confusion matrix is created and the metrics are obtained with the second program.
+
 
 ### Install environment
 
