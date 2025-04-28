@@ -24,8 +24,6 @@ In light of the recent thriving of deep learning-driven prediction tools for mol
 
 In the following project, we focus on using and evaluating domain-specific deep learning models which can help describe and understand RPIs by modeling and classifying them.
 
-The term **"molecules"** will refer to either protein residues, protein amino acids, or RNA nucleotides; to denote biological entities at a greater scale than atoms.
-
 The following concepts were important for the evaluations made:
 
 ### AlphaFold3
@@ -100,16 +98,14 @@ Feature tables were built from the RPI examples, and TabPFN was applied to provi
 
 ## Structured project outlook
 
-PART 1 Examining RPIEmbeddor performance on RPI examples 1
+### PART 1 Examining RPIEmbeddor performance on RPI examples 1
 
 The test set of the RPIEmbeddor tool was used to validate the predictions on it and obtain some performance metrics on this test set.
 Also we evaluated the prediction behavior of the RPIEmberddor tool (Matus, D. et al, 2024) on a set of validated RPI examples.
 
+### PART 2 Comparing the AlphaFold3 output metrics distributions between RPI positives and negatives examples
 
-PART 2 Comparing the AlphaFold3 output metrics distributions between RPI positives and negatives examples
-
-
-PART 3 Classifying RNA-Protein Interactions with TabPFN and AlphaFold3
+### PART 3 Classifying RNA-Protein Interactions with TabPFN and AlphaFold3
 
 
 ## Reproducing results
