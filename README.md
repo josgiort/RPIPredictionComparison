@@ -28,8 +28,7 @@ The following concepts were important for the evaluations made:
 
 ### AlphaFold3
 
-AlphaFold3 [Abramson et al., 2024] is the latest version of DeepMind’s protein structure prediction system, now expanded to model not only individual proteins but also protein–protein, protein–RNA, and other biomolecular complexes. Recently, it has gained the attention of the community for its accurate predictions on proteins alone. However, its modeling capabilities still lack accuracy regarding some other biomolecules and multimolecular complexes, and therefore, more caution must be put when working with these.
-
+AlphaFold3 [Abramson et al., 2024] is the latest version of DeepMind’s protein structure prediction system, now expanded to model not only individual proteins but also protein–protein, protein–RNA, and other biomolecular complexes. 
 In this project, AlphaFold3 was considered as a structural resource to identify points suggesting RPIs within the sequences and to get an impression on how correct its predictions can be on RPIs.
 
 #### PAE
@@ -37,11 +36,9 @@ In this project, AlphaFold3 was considered as a structural resource to identify 
 **PAE** (Predicted Aligned Error) is a metric of relative positional confidence between pairs of molecules (protein residues, RNA nucleotides, etc.) from the predicted structure.  
 Specifically, PAE(A,B) tells how much misplaced (expected positional error in Ångströms) a molecule B is with respect to the frame of reference of molecule A (and vice versa). The errors can differ slightly between the two directions as a result of possible disordered regions.
 
-The PAE is provided in a square matrix with dimension (number of residues + number of nucleotides) × (number of residues + number of nucleotides) in an AlphaFold3 output JSON file.
-
 #### pLDDT
 
-**pLDDT** (predicted Local Distance Difference Test) is a per-atom metric of local confidence. It is scaled from 0 to 100, with higher scores indicating higher confidence. It measures the expected local accuracy for the atoms of a given molecule. The pLDDT is provided as a one-dimensional array in an AlphaFold3 output JSON file.
+**pLDDT** (predicted Local Distance Difference Test) is a per-atom metric of local confidence. It is scaled from 0 to 100, with higher scores indicating higher confidence. It measures the expected local accuracy for the atoms of a given molecule. 
 
 ### Distance Matrix
 
@@ -140,6 +137,8 @@ python FormatForInference.py 3 example1.fasta output_example1.txt
 And then:
 
 python PredictRPIEmbeddor.py output_example1.txt result_example1.txt
+
+Please refer to "preprocessing_script.pdf" for more details on the working of this script.
 
 
 
