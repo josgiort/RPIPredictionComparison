@@ -122,8 +122,8 @@ And then:
 
 python ConfusionMatrix.py
 
-File "dataset_inference.txt" contains the TS-Fam testing set of RPIembeddor
-With the first program, RPIembeddor is run on the sequences of TS-Fam and the predictions are stored in "result_table.txt"
+File "dataset_inference.txt" contains the TS-Fam testing set of RPIembeddor.
+With the first program, RPIembeddor is run on the sequences of TS-Fam and the predictions are stored in "result_table.txt".
 Then from this last file the confusion matrix is created and the metrics are obtained with the second program.
 
 
