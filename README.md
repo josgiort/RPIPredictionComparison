@@ -36,3 +36,6 @@ PART 2 Comparing the AlphaFold3 output metrics distributions between RPI positiv
 
 PART 3 Classifying RNA-Protein Interactions with TabPFN and AlphaFold3
 
+
+
+Seguir preparando este repo, no se va a subir el RNA compete completo es demasiado pesado

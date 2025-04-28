@@ -23,6 +23,8 @@ def from_middle(seq_id, seq_len, itr_trim_spacing, intvl_bdary_l, intvl_bdary_r)
     l_chunk = intvl_bdary_l
     r_chunk = seq_len - intvl_bdary_r
 
+    # MAking sure the maximal allowed length is not supassed
+
     half = (min(1022, seq_len) - len_intvl) // 2
 
     if l_chunk >= half:
@@ -47,14 +49,21 @@ def from_middle(seq_id, seq_len, itr_trim_spacing, intvl_bdary_l, intvl_bdary_r)
             chain_indexes += seq_id + "\t" + str(final_l) + "\t" + str(final_r) + "\n"
     else:
         if left_extension > right_extension:
+            # Only matters the magnitude of the greater extension to loop across iteratively extending lenghts with range()
             for i in range(1, left_extension + 1, itr_trim_spacing):
+                # As left extension is grater in this case it directly uses iteratively extending length from loop
                 final_l = intvl_bdary_l - i
+                # The difficulty here lies on the right extension as it spans less, so cant extend as long as the left one, so
+                # while its possible uses the range() generated extending lenghts
                 if i <= right_extension:
                     final_r = intvl_bdary_r + i
                 else:
+                    # else there comes the moment where it reaches its limit and now range() generated extending lengths surpass it
+                    # and right extension must restrict itself
                     final_r = intvl_bdary_r + right_extension
                 chain_indexes += seq_id + "\t" + str(final_l) + "\t" + str(final_r) + "\n"
         else:
+            # Same considerations apply here as the immediate above ones, just now from the perspective of left extension being smaller
             for i in range(1, right_extension + 1, itr_trim_spacing):
                 final_r = intvl_bdary_r + i
                 if i <= left_extension:

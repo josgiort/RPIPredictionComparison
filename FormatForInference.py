@@ -5,19 +5,19 @@ import re
 from TrimmingMode import from_left, from_right, from_middle
 from Bio import SeqIO
 
-# This file sets up the fasta file of RNA sequences to a proper text format for RPIEmbeddor to do inference
+# This file sets up the fasta file of RNA sequences to a proper format for RPIEmbeddor to infer
 # This file has three modes of operation for handling the RNA sequences
 
 # RNA sequences need to be specified in a fasta file 'sequences.fasta'
-# Depending on the mode of operation of the script, it would be required that RNA sequences have arguments in their sequence description line, for example:
+# Depending on the mode of operation of the script, it would be required that RNA sequences have or not a couple of parameters in their sequence description line, for example:
 # >sequence1 | parameter_1=1234 parameter_2=1234 parameter_3=1234
 
 
 # Mode 1: taking whole RNA sequence.
 # Mode 2: taking substring from RNA sequence.
-# Mode 3: taking substrings with gradually incrementing lengths from a starting part of the RNA sequence, these increments
-# can be done from the sequence left end, from the sequence right end or from some part within the sequence,
-# for this last case, the increments are done simultaneously to the left and to the right of the specified starting part (interval)
+# Mode 3: taking substrings with gradually incrementing lengths from a starting section of the RNA sequence, these increments
+# can be done from the sequence left end, from the sequence right end or from some part within the sequence.
+# For this last case, the increments are done simultaneously to the left and to the right of the specified starting section (interval)
 # until reaching, if possible, the half of the sequence length at each direction.
 
 # Please specify only either 1, 2 or 3 for desired mode of operation
@@ -68,7 +68,7 @@ elif mode_operation == 2:
 
             chain_indexes += record.id + "\t" + str(left_boundary) + "\t" + str(right_boundary) + "\n"
 
-# if mode is 3, several substrings of successive varying length are taken
+# if mode is 3, substrings of successive varying length are taken
 # it needs some parameters on the description line of the sequences in the fasta file
 # the process of getting several subchains from a given starting index in a chain,
 # by gradually increasing their lengths by a constant factor
@@ -76,13 +76,12 @@ elif mode_operation == 2:
 elif mode_operation == 3:
     # Check correct format of input file
     for record in sequences:
-        arguments = re.findall("\| varying_length_mode=[0-9] spacing=[0-9]{1,3}(?: middle_start_left=[0-9]+ middle_start_right=[0-9]+)?", record.description)
+        arguments = re.findall("\| submode=[0-9] spacing=[0-9]{1,3}(?: middle_start_left=[0-9]+ middle_start_right=[0-9]+)?", record.description)
         if len(arguments) == 0:
             print("Not proper arguments for varying length substrings")
             exit(0)
         else:
-            #args_varying_lengths = re.split(" ", record.description)
-            varying_length_mode = re.findall("varying_length_mode=[0-9]", record.description)
+            varying_length_mode = re.findall("submode=[0-9]", record.description)
             varying_length_mode = int(varying_length_mode[0].split("=")[1].strip())
 
             spacing = re.findall("spacing=[0-9]{1,3}", record.description)
@@ -106,7 +105,7 @@ elif mode_operation == 3:
             elif varying_length_mode == 2:
                 chain_indexes += from_middle(record.id, seq_len, spacing, middle_start_left, middle_start_right)
             else:
-                print("Invalid argument varying_length_mode")
+                print("Invalid argument submode")
                 exit(0)
 
 else:
@@ -131,7 +130,6 @@ with open("subchains.fasta") as fasta_file:
         if sequence_id not in fasta_dict:
             fasta_dict[sequence_id] = []
         # Append the sequence to the corresponding key in the dictionary
-        #fasta_dict[sequence_id].append(str(seq_record.seq))
         fasta_dict[sequence_id].append([seq_record.id.split('|')[0], seq_record.seq])
 
 dataset_inference = ""
