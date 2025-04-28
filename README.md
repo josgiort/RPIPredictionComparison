@@ -3,8 +3,7 @@ This is a documentation repository for a master project from the univerisity of 
 
 <img src="https://github.com/user-attachments/assets/23612e45-d64b-456c-9c4e-c5bd4662c32c" alt="university" width="300"/>
 
-
-### Abstract
+## Abstract
 
 This project explores the use of deep learning models for predicting RNA–protein
 interactions (RPIs). We observed the performance of an RPI classifier. We
@@ -17,7 +16,7 @@ sequence level signals of RNA-protein binding and TabPFN can succeed at
 RPI recognition given the right feature set.
 
 
-# RNA–Protein Interactions (RPIs) and Deep Learning
+## RNA–Protein Interactions (RPIs) and Deep Learning
 
 The driving biological actors of this work are the RNA-Protein Interactions (RPIs), as they hold tremendous importance in life.
 
@@ -29,24 +28,24 @@ The term **"molecules"** will refer to either protein residues, protein amino ac
 
 The following concepts were important for the evaluations made:
 
-## AlphaFold3
+### AlphaFold3
 
 AlphaFold3 [Abramson et al., 2024] is the latest version of DeepMind’s protein structure prediction system, now expanded to model not only individual proteins but also protein–protein, protein–RNA, and other biomolecular complexes. Recently, it has gained the attention of the community for its accurate predictions on proteins alone. However, its modeling capabilities still lack accuracy regarding some other biomolecules and multimolecular complexes, and therefore, more caution must be put when working with these.
 
 In this work, AlphaFold3 was considered as a structural resource to identify points suggesting RPIs within the sequences and to get an impression on how correct its predictions can be on RPIs.
 
-### PAE
+#### PAE
 
 **PAE** (Predicted Aligned Error) is a metric of relative positional confidence between pairs of molecules (protein residues, RNA nucleotides, etc.) from the predicted structure.  
 Specifically, PAE(A,B) tells how much misplaced (expected positional error in Ångströms) a molecule B is with respect to the frame of reference of molecule A (and vice versa). The errors can differ slightly between the two directions as a result of possible disordered regions.
 
 The PAE is provided in a square matrix with dimension (number of residues + number of nucleotides) × (number of residues + number of nucleotides) in an AlphaFold3 output JSON file.
 
-### pLDDT
+#### pLDDT
 
 **pLDDT** (predicted Local Distance Difference Test) is a per-atom metric of local confidence. It is scaled from 0 to 100, with higher scores indicating higher confidence. It measures the expected local accuracy for the atoms of a given molecule. The pLDDT is provided as a one-dimensional array in an AlphaFold3 output JSON file.
 
-## Distance Matrix
+### Distance Matrix
 
 In several parts of this work, we leverage AlphaFold3 RPI complex predictions by creating a distance matrix between all protein residues and RNA nucleotides.
 
@@ -59,7 +58,7 @@ The pLDDT and PAE confidence metrics are plotted alongside the matrix to illustr
 
 The close residue–nucleotide pairs are later exported into a CSV file for further evaluation.
 
-## RNACompete: A Methodology to Derive Positive and Negative RPI Examples
+### RNACompete: A Methodology to Derive Positive and Negative RPI Examples
 
 **RNAcompete** [Ray et al., 2017] is a high-throughput experimental platform designed to systematically measure the binding preferences of RNA-binding proteins (RBPs) against synthetic RNA sequences. It provides quantitative binding affinity scores between a protein and numerous RNA sequences.
 
@@ -68,13 +67,13 @@ The protein sequence remained constant, and only the RNA sequences varied.
 
 This process was performed on 244 RNAcompete proteins, yielding a total of 1464 RPI examples.
 
-## RPIembeddor
+### RPIembeddor
 
 **RPIembeddor** [Matus et al., 2024] is a novel transformer-based model designed for classifying ncRNA–protein interactions. It accepts two sequences — a protein amino acid sequence and an RNA nucleotide sequence — each of up to 1022 characters in length.  
 
 The program outputs whether the two sequences interact by printing either **"POSITIVE INTERACTION"** or **"NEGATIVE INTERACTION"** to the console.
 
-## bedtools
+### bedtools
 
 **bedtools** [Quinlan and Hall, 2010] is a suite of methods for various genomics analysis tasks. It allows users to intersect, merge, count, complement, and shuffle genomic intervals.
 
@@ -84,12 +83,12 @@ We used the `getfasta` method, which:
 - Extracts the corresponding DNA sequences,
 - Outputs a FASTA file containing the extracted sequences.
 
-## FASTA
+### FASTA
 
 A **FASTA** file is a text format for storing nucleotide or protein sequences.  
 Each entry starts with a header line (preceded by `>`), followed by the sequence itself.
 
-## TabPFN
+### TabPFN
 
 **TabPFN** [Hollmann et al., 2025] (Tabular Prior-Data Fitted Network) is a pretrained transformer model for tabular data classification.  
 It requires no training on the target dataset and can directly perform inference by leveraging prior knowledge learned from millions of synthetic tasks.
