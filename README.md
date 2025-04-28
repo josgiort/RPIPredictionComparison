@@ -1,7 +1,7 @@
 # Master project
 This is a documentation repository for a master project from the univerisity of freiburg
 
-<img src="https://github.com/user-attachments/assets/23612e45-d64b-456c-9c4e-c5bd4662c32c" alt="university" width="500"/>
+<img src="https://github.com/user-attachments/assets/23612e45-d64b-456c-9c4e-c5bd4662c32c" alt="university" width="400"/>
 
 
 ### Objective of the master project
