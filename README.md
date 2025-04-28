@@ -112,6 +112,8 @@ Also we evaluated the prediction behavior of the RPIEmberddor tool (Matus, D. et
 
 ### Part one
 
+Enter the folder "part1"
+
 Enter the folder "dataset_predictions"
 
 There run:
@@ -125,6 +127,20 @@ python ConfusionMatrix.py
 File "dataset_inference.txt" contains the TS-Fam testing set of RPIembeddor.
 With the first program, RPIembeddor is run on the sequences of TS-Fam and the predictions are stored in "result_table.txt".
 Then from this last file the confusion matrix is created and the metrics are obtained with the second program.
+
+
+Also:
+
+Enter the folder "part1"
+
+There run:
+
+python FormatForInference.py 3 example1.fasta output_example1.txt
+
+And then:
+
+python PredictRPIEmbeddor.py output_example1.txt result_example1.txt
+
 
 
 ### Install environment
