@@ -18,11 +18,11 @@ RPI recognition given the right feature set.
 
 ## "Analysis of RNA-Protein complexes predicted with deep learning"
 
-The driving biological actors of this work are the RNA-Protein Interactions (RPIs), as they hold tremendous importance in life.
+The driving biological actors of this project are the RNA-Protein Interactions (RPIs), as they hold tremendous importance in life.
 
 In light of the recent thriving of deep learning-driven prediction tools for molecules alone, the next big step in this domain would be modeling interactions between them. However, realizing such a task is significantly more challenging due to the complexity of binding, folding, and dynamics.
 
-In the following work, we focus on using and evaluating domain-specific deep learning models which can help describe and understand RPIs by modeling and classifying them.
+In the following project, we focus on using and evaluating domain-specific deep learning models which can help describe and understand RPIs by modeling and classifying them.
 
 The term **"molecules"** will refer to either protein residues, protein amino acids, or RNA nucleotides; to denote biological entities at a greater scale than atoms.
 
@@ -32,7 +32,7 @@ The following concepts were important for the evaluations made:
 
 AlphaFold3 [Abramson et al., 2024] is the latest version of DeepMind’s protein structure prediction system, now expanded to model not only individual proteins but also protein–protein, protein–RNA, and other biomolecular complexes. Recently, it has gained the attention of the community for its accurate predictions on proteins alone. However, its modeling capabilities still lack accuracy regarding some other biomolecules and multimolecular complexes, and therefore, more caution must be put when working with these.
 
-In this work, AlphaFold3 was considered as a structural resource to identify points suggesting RPIs within the sequences and to get an impression on how correct its predictions can be on RPIs.
+In this project, AlphaFold3 was considered as a structural resource to identify points suggesting RPIs within the sequences and to get an impression on how correct its predictions can be on RPIs.
 
 #### PAE
 
@@ -47,7 +47,7 @@ The PAE is provided in a square matrix with dimension (number of residues + numb
 
 ### Distance Matrix
 
-In several parts of this work, we leverage AlphaFold3 RPI complex predictions by creating a distance matrix between all protein residues and RNA nucleotides.
+In several parts of this project, we leverage AlphaFold3 RPI complex predictions by creating a distance matrix between all protein residues and RNA nucleotides.
 
 This matrix (with dimensions number of residues × number of nucleotides) is crucial.  
 From it, residue-nucleotide pairs within five Ångströms from each other are identified, implying potential RPI points.
