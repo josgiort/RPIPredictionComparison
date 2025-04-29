@@ -131,8 +131,7 @@ Also:
 Enter the folder "part1"
 
 There run:
-<pre> ```text Column 1 Column 2 Column 3 Data A Data B Data C ``` </pre>
-python FormatForInference.py 3 example1.fasta output_example1.txt
+<pre>python FormatForInference.py 3 example1.fasta output_example1.txt</pre>
 
 And then:
 
