@@ -115,11 +115,11 @@ Enter the folder "dataset_predictions"
 
 There run:
 
-python pred_embeddor.py
+<pre>python pred_embeddor.py</pre>
 
 And then:
 
-python ConfusionMatrix.py
+<pre>python ConfusionMatrix.py</pre>
 
 File "dataset_inference.txt" contains the TS-Fam testing set of RPIembeddor.
 With the first program, RPIembeddor is run on the sequences of TS-Fam and the predictions are stored in "result_table.txt".
@@ -135,7 +135,7 @@ There run:
 
 And then:
 
-python PredictRPIEmbeddor.py output_example1.txt result_example1.txt
+<pre>python PredictRPIEmbeddor.py output_example1.txt result_example1.txt</pre>
 
 Please refer to "preprocessing_script.pdf" for more details on the working of this script.
 
@@ -145,4 +145,4 @@ Please refer to "preprocessing_script.pdf" for more details on the working of th
 
 ##### Install bedtools
 
-apt-get install bedtools
+<pre>apt-get install bedtools</pre>
