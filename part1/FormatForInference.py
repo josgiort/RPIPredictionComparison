@@ -4,6 +4,8 @@ import subprocess
 import re
 from TrimmingMode import from_left, from_right, from_middle
 from Bio import SeqIO
+import os
+import shutil
 
 # This file sets up the fasta file of RNA sequences to a proper format for RPIEmbeddor to infer
 # This file has three modes of operation for handling the RNA sequences
@@ -24,8 +26,7 @@ from Bio import SeqIO
 mode_operation = int(sys.argv[1])
 # Please name this file "sequences.fasta"
 input_file = sys.argv[2]
-# Please name this file "dataset_inference.txt"
-output_file = sys.argv[3]
+output_file = input_file.split(".")[0] + "_inference.txt"
 
 sequences = list(SeqIO.parse(input_file, "fasta"))
 chain_indexes = ""
@@ -112,17 +113,21 @@ else:
     print("Please enter a valid mode of operation")
     exit(0)
 
+dir_out = input_file.split(".")[0] + "_outputs"
+os.makedirs(dir_out, exist_ok=True)
+
 # With "w" option, it will override any existing content and create a new file if "indexes.bed" does not exist
-f = open("indexes.bed", "w")
+f = open(dir_out + "/" + input_file.split(".")[0] + "_indexes.bed", "w")
 f.write(chain_indexes)
 f.close()
 
 # Call for 'bedtools getfasta' to generate the subchains into another fasta file
-subprocess.run(["bash", "-c", "bedtools getfasta -fi " + input_file + " -bed indexes.bed -fo subchains.fasta"])
+subprocess.run(["bash", "-c", "bedtools getfasta -fi " + input_file +
+                " -bed " + dir_out + "/" + input_file.split(".")[0] + "_indexes.bed" + " -fo " + dir_out + "/" + input_file.split(".")[0] + "_subchains.fasta"])
 
 fasta_dict = {}
 # Open the FASTA file and parse it
-with open("subchains.fasta") as fasta_file:
+with open(dir_out + "/" + input_file.split(".")[0] + "_subchains.fasta") as fasta_file:
     for seq_record in SeqIO.parse(fasta_file, "fasta"):
         # Extract the whole sequence ID or first part of the sequence ID before ':'
         sequence_id = seq_record.id.split(':')[0]
@@ -132,6 +137,13 @@ with open("subchains.fasta") as fasta_file:
         # Append the sequence to the corresponding key in the dictionary
         fasta_dict[sequence_id].append([seq_record.id.split('|')[0], seq_record.seq])
 
+
+fai_file = input_file + ".fai"
+destination = os.path.join(dir_out, os.path.basename(fai_file))
+if os.path.exists(fai_file):
+    shutil.move(fai_file, destination)
+
+
 dataset_inference = ""
 with open('test_set.jsonl', 'r') as json_file:
     for (line, key_val) in zip(json_file, fasta_dict.items()):
@@ -139,6 +151,6 @@ with open('test_set.jsonl', 'r') as json_file:
         for seq in key_val[1]:
             dataset_inference += str(data_entry["Sequence_2"].upper()) + '\t' + str(data_entry["Sequence_2_len"]) + '\t' + seq[0] + '\t' + str(seq[1]) + '\t' + str(len(seq[1])) + '\t' + str(data_entry["Interaction"]) + '\n'
 
-f = open(output_file, "w")
+f = open(dir_out + "/" + output_file, "w")
 f.write(dataset_inference)
 f.close()
