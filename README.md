@@ -107,7 +107,7 @@ Also we evaluated the prediction behavior of the RPIEmberddor tool (Matus, D. et
 
 ## Reproducing results
 
-### Part one
+<pre><pre>### Part one: Examining RPIEmbeddor performance on RPI examples 1</pre></pre>
 
 Enter the folder "part1"
 
@@ -146,3 +146,6 @@ Please refer to "preprocessing_script.pdf" for more details on the working of th
 ##### Install bedtools
 
 <pre>apt-get install bedtools</pre>
+
+
+### Part two: 
