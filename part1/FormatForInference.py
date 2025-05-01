@@ -3,6 +3,7 @@ import sys
 import subprocess
 import re
 from TrimmingMode import from_left, from_right, from_middle
+from PredictRPIEmbeddor import run_inference
 from Bio import SeqIO
 import os
 import shutil
@@ -145,7 +146,7 @@ if os.path.exists(fai_file):
 
 
 dataset_inference = ""
-with open('test_set.jsonl', 'r') as json_file:
+with open('test_set_'+ input_file.split(".")[0] +'.jsonl', 'r') as json_file:
     for (line, key_val) in zip(json_file, fasta_dict.items()):
         data_entry = json.loads(line)
         for seq in key_val[1]:
@@ -154,3 +155,6 @@ with open('test_set.jsonl', 'r') as json_file:
 f = open(dir_out + "/" + output_file, "w")
 f.write(dataset_inference)
 f.close()
+
+run_inference(output_file)
+
