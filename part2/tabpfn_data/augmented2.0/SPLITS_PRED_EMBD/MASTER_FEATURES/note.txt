@@ -1,0 +1,10 @@
+COLUMNAS EXCLUIDAS
+
+7mer start
+7mer end
+pct ol max min mer
+
+Id
+
+rbp_name_y
+
