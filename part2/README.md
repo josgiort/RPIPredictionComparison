@@ -21,26 +21,9 @@ Then
 ```
 ./generate_plots.sh
 ```
-## Generate pLDDT density comparison between two datasets (RNACompete maxprobes and minprobes)
-The pLDDT's values are set in bins.
-The densities sum up to 1.0
 
-Just run:
-```
-python compare_plddt.py
-```
-
-
-
-## Generate PAE density comparison between two datasets (RNACompete maxprobes and minprobes)
-The PAE's values are set in bins.
-The densities sum up to 1.0
-
-Just run:
-```
-python compare_pae.py
-```
-
+Then two directories are created containing the plots.
+"plots" corresponds to RNAcompete data and "plots_alt" to the alternative dataset
 
 
 
