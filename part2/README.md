@@ -11,17 +11,14 @@ Then run ```pip install pandas matplotlib plotly```.
 python -m example
 ```
 
-## Generate frequency comparison plot on the counts of kmer pairs between two datasets
-The diagonal reference line (y = x) helps visually check if the counts are similar between the two datasets for a given kmer pair:
-- Points near the diagonal indicate similar counts in both datasets.
-- Points above the diagonal suggest that the trimer appears more frequently in the dataset represented in the vertical axe than in dataset on the horizontal ax.
-- Points below the diagonal suggest that the trimer appears more frequently in the dataset represented in the horizontal axe than in dataset on the vertical ax.
+## Generate plots of part two
 
-Just run:
+Run:
 ```
-python -m diagonal_plot
+chmod +x generate_plots.sh
 ```
-
+Then
+./generate_plots.sh
 
 ## Generate pLDDT density comparison between two datasets (RNACompete maxprobes and minprobes)
 The pLDDT's values are set in bins.
