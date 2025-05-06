@@ -18,8 +18,9 @@ Run:
 chmod +x generate_plots.sh
 ```
 Then
+...
 ./generate_plots.sh
-
+...
 ## Generate pLDDT density comparison between two datasets (RNACompete maxprobes and minprobes)
 The pLDDT's values are set in bins.
 The densities sum up to 1.0
