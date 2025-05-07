@@ -15,33 +15,21 @@ might still need more generalization capabilities, AlphaFold3 can recognize
 sequence level signals of RNA-protein binding and TabPFN can succeed at
 RPI recognition given the right feature set.
 
-
 ## "Analysis of RNA-Protein complexes predicted with deep learning"
 
 The driving biological actors of this project are the RNA-Protein Interactions (RPIs), as they hold tremendous importance in life.
-
 In light of the recent thriving of deep learning-driven prediction tools for molecules alone, the next big step in this domain would be modeling interactions between them. However, realizing such a task is significantly more challenging due to the complexity of binding, folding, and dynamics.
 
-In the following project, we focus on using and evaluating domain-specific deep learning models which can help describe and understand RPIs by modeling and classifying them.
+In the following project, we focus on using and evaluating domain-specific deep learning models which can help describe and understand RPIs by modeling and classifying them. We made use of the following tools:
 
-We made use of the following tools:
-
-### AlphaFold3
-
-AlphaFold3 [Abramson et al., 2024] is the latest version of DeepMind’s protein structure prediction system, now expanded to model not only individual proteins but also protein–protein, protein–RNA, and other biomolecular complexes. 
+**AlphaFold3** [Abramson et al., 2024] is the latest version of DeepMind’s protein structure prediction system, now expanded to model not only individual proteins but also protein–protein, protein–RNA, and other biomolecular complexes. 
 In this project, AlphaFold3 was considered as a structural resource to identify points suggesting RPIs within the sequences and to get an impression on how correct its predictions can be on RPIs.
-
-### RNACompete: A Methodology to Derive Positive and Negative RPI Examples
 
 **RNAcompete** [Ray et al., 2017] is a high-throughput experimental platform designed to systematically measure the binding preferences of RNA-binding proteins (RBPs) against synthetic RNA sequences. It provides quantitative binding affinity scores between a protein and numerous RNA sequences.
 We utilized the RNAcompete dataset to generate positive and negative examples for evaluation. Specifically, we selected proteins and extracted six RNA–protein interaction examples per protein: the three RNA sequences with the highest binding energies (strong interaction, labeled positive) and the three with the lowest (weak or no interaction, labeled negative).  
 
-### RPIembeddor
-
 **RPIembeddor** [Matus et al., 2024] is a novel transformer-based model designed for classifying ncRNA–protein interactions. It accepts two sequences — a protein amino acid sequence and an RNA nucleotide sequence — each of up to 1022 characters in length.  
 The program outputs whether the two sequences interact by printing either **"POSITIVE INTERACTION"** or **"NEGATIVE INTERACTION"** to the console.
-
-### TabPFN
 
 **TabPFN** [Hollmann et al., 2025] (Tabular Prior-Data Fitted Network) is a pretrained transformer model for tabular data classification.  
 It requires no training on the target dataset and can directly perform inference by leveraging prior knowledge learned from millions of synthetic tasks.
