@@ -24,7 +24,7 @@ In light of the recent thriving of deep learning-driven prediction tools for mol
 
 In the following project, we focus on using and evaluating domain-specific deep learning models which can help describe and understand RPIs by modeling and classifying them.
 
-The following concepts were important for the evaluations made:
+We made use of the following tools:
 
 ### AlphaFold3
 
