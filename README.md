@@ -31,12 +31,6 @@ The following concepts were important for the evaluations made:
 AlphaFold3 [Abramson et al., 2024] is the latest version of DeepMind’s protein structure prediction system, now expanded to model not only individual proteins but also protein–protein, protein–RNA, and other biomolecular complexes. 
 In this project, AlphaFold3 was considered as a structural resource to identify points suggesting RPIs within the sequences and to get an impression on how correct its predictions can be on RPIs.
 
-### Distance Matrix
-
-In several parts of this project, we leverage AlphaFold3 RPI complex predictions by creating a distance matrix between all protein residues and RNA nucleotides.
-This matrix (with dimensions number of residues × number of nucleotides) is crucial.  
-From it, residue-nucleotide pairs within five Ångströms from each other are identified, implying potential RPI points.
-
 ### RNACompete: A Methodology to Derive Positive and Negative RPI Examples
 
 **RNAcompete** [Ray et al., 2017] is a high-throughput experimental platform designed to systematically measure the binding preferences of RNA-binding proteins (RBPs) against synthetic RNA sequences. It provides quantitative binding affinity scores between a protein and numerous RNA sequences.
