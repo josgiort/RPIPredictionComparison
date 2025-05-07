@@ -76,11 +76,7 @@ Also:
 Enter the folder "part1"
 
 There run:
-<pre>python FormatForInference.py 3 example1.fasta output_example1.txt</pre>
-
-And then:
-
-<pre>python PredictRPIEmbeddor.py output_example1.txt result_example1.txt</pre>
+<pre>python Predict.py 3 example1.fasta</pre>
 
 Please refer to "preprocessing_script.pdf" for more details on the working of this script.
 
