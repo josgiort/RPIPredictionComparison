@@ -92,16 +92,22 @@ def run_inference(input_file):
                 # Handle the case when for any reason there was stdout but with no prediction in it
                 positive_pred = stdout.find("POSITIVE")
                 negative_pred = stdout.find("NEGATIVE")
+                match = re.search(r"INTERACTION PROBABILITY:\s*([0-9]*\.?[0-9]+)", stdout)
                 if positive_pred != -1:
                     prediction = "True"
+                    prob = float(match.group(1))
                 elif negative_pred != -1:
                     prediction = "False"
+                    prob = float(match.group(1))
                 # Case both variables are -1, neither positive nor negative found in any of the variables
                 else:
                     prediction = "N/A Pred"
+                    prob = 0.00
             elif stderr != None:
                 prediction = stderr
-            result_table += line.replace("\n", "") + '\t' + prediction + '\n'
+            result_table += line.replace("\n", "") + '\t' + prediction + '\t' + str(prob) + '\n'
     f = open(out_dir + "/" + output_file, "w")
     f.write(result_table)
     f.close()
+
+    return output_file
