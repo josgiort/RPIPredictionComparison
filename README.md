@@ -90,3 +90,4 @@ Please refer to "preprocessing_script.pdf" for more details on the working of th
 
 
 ### Part two: 
+Please refer to the README.me file inside the part2 folder.
